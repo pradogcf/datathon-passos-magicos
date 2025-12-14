@@ -1,0 +1,3 @@
+criterio,corte,qtd,%
+Baixo desempenho (IDA <= P25),4.8,228,26.5
+Crítico (IDA <= P10),3.3,97,11.3
