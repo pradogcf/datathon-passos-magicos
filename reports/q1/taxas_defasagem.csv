@@ -1,0 +1,5 @@
+grupo,qtd,%
+Sem defasagem (Defas=0),247,28.7
+Defasagem leve (Defas=-1),410,47.7
+Defasagem moderada+ (Defas<=-2),191,22.2
+Defasagem severa (Defas<=-3),28,3.3
