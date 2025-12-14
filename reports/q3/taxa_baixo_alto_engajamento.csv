@@ -1,0 +1,3 @@
+criterio,corte,qtd,%
+Baixo engajamento (IEG <= P25),7.0,220,25.6
+Alto engajamento (IEG >= P75),9.1,232,27.0

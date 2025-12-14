@@ -1,0 +1,43 @@
+coluna,dtype,missing_%,n_unicos
+Inglês,float64,67.09,78
+Rec Av4,object,65.58,5
+Avaliador4,object,63.95,1
+Pedra 20,object,62.44,4
+Pedra 21,object,46.28,4
+Avaliador3,object,37.91,6
+Matem,float64,0.23,77
+Portug,float64,0.23,82
+Ano ingresso,int64,0.0,7
+Ano nasc,int64,0.0,15
+Atingiu PV,object,0.0,2
+Avaliador1,object,0.0,6
+Avaliador2,object,0.0,4
+Cf,int64,0.0,192
+Cg,int64,0.0,860
+Ct,int64,0.0,18
+Defas,int64,0.0,8
+Destaque IDA,object,0.0,2
+Destaque IEG,object,0.0,2
+Destaque IPV,object,0.0,2
+Fase,int64,0.0,8
+Fase ideal,object,0.0,9
+Gênero,object,0.0,2
+IAA,float64,0.0,30
+IAN,float64,0.0,3
+IDA,float64,0.0,92
+IEG,float64,0.0,75
+INDE 22,float64,0.0,745
+IPS,float64,0.0,12
+IPV,float64,0.0,170
+Idade 22,int64,0.0,15
+Indicado,object,0.0,2
+Instituição de ensino,object,0.0,3
+Nome,object,0.0,860
+Nº Av,int64,0.0,3
+Pedra 22,object,0.0,4
+RA,object,0.0,860
+Rec Av1,object,0.0,6
+Rec Av2,object,0.0,5
+Rec Av3,object,0.0,6
+Rec Psicologia,object,0.0,5
+Turma,object,0.0,24
