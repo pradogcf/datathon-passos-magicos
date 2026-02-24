@@ -1,10 +1,10 @@
 {
   "target": "risco_defasagem",
-  "target_definition": "1 se Defas >= P75 (threshold calculado no dataset)",
-  "defas_threshold_p75": 0.0,
+  "target_definition": "1 se Defas > 0 (qualquer defasagem)",
+  "threshold_reference": 0.0,
   "n_rows_total": 860,
   "n_rows_model": 860,
-  "positive_rate_model": 0.30116279069767443,
+  "positive_rate_model": 0.013953488372093023,
   "features_numeric": [
     "IDA",
     "IEG",
@@ -19,6 +19,10 @@
     "G\u00eanero",
     "Turma"
   ],
-  "roc_auc": 0.9826666666666666,
-  "pr_auc": 0.9631386645616269
+  "removed_leakage_cols": [
+    "Defas",
+    "IAN"
+  ],
+  "roc_auc": 0.8962264150943396,
+  "pr_auc": 0.13392255892255892
 }

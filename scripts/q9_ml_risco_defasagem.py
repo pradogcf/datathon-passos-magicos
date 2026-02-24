@@ -1,7 +1,10 @@
 """
-Pergunta 9 — ML: Previsão de risco de defasagem (AJUSTADO)
-- Corrige erro do permutation_importance em matriz esparsa usando importância por coeficientes
-- Gera outputs em reports/q9 e salva modelo/metadata em models/
+Pergunta 9 — ML: Previsão de risco de defasagem (AJUSTADO E ROBUSTO)
+
+
+Saídas:
+- reports/q9/*.png, *.csv, README_q9.md
+- models/q9_model.pkl e models/q9_metadata.json
 
 Rodar:
     source .venv/bin/activate
@@ -12,6 +15,7 @@ from __future__ import annotations
 
 from pathlib import Path
 import json
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -70,14 +74,24 @@ def main() -> None:
         df[c] = pd.to_numeric(df[c], errors="coerce")
 
     # =========================================================
-    # 2) Definir alvo (RISCO) via Defas >= P75
+    # 2) Definir alvo (RISCO) — ROBUSTO
     # =========================================================
-    defas = df["Defas"].dropna()
-    if defas.shape[0] < 50:
+    defas_all = df["Defas"].dropna()
+    if defas_all.shape[0] < 50:
         raise ValueError("Poucos dados não-nulos em Defas para treinar modelo com segurança.")
 
-    thr = float(defas.quantile(0.75))
-    df["risco_defasagem"] = (df["Defas"] >= thr).astype(int)
+    defas_pos = df.loc[df["Defas"].notna() & (df["Defas"] > 0), "Defas"]
+
+    # Default (robusto): risco = Defas > 0
+    thr = 0.0
+    df["risco_defasagem"] = (df["Defas"] > 0).astype(int)
+    target_definition = "1 se Defas > 0 (qualquer defasagem)"
+
+    # Se houver casos suficientes, podemos refinar: risco alto = top quartil entre Defas>0
+    if defas_pos.shape[0] >= 50:
+        thr = float(defas_pos.quantile(0.75))
+        df["risco_defasagem"] = ((df["Defas"] > 0) & (df["Defas"] >= thr)).astype(int)
+        target_definition = "1 se Defas > 0 e Defas >= P75 calculado em Defas>0"
 
     # Evitar vazamento: remover Defas e IAN (se existir)
     leak_cols = [c for c in ["Defas", "IAN"] if c in df.columns]
@@ -91,6 +105,13 @@ def main() -> None:
 
     X = df_model[num_cols + cat_cols]
     y = df_model["risco_defasagem"]
+
+    # Segurança: precisa ter as duas classes
+    if y.nunique() < 2:
+        raise ValueError(
+            "O alvo risco_defasagem tem apenas uma classe (tudo 0 ou tudo 1). "
+            "Não é possível treinar um classificador."
+        )
 
     # =========================================================
     # 3) Split treino/teste
@@ -178,9 +199,7 @@ def main() -> None:
 
     # =========================================================
     # 7) Importância de features (coeficientes do Logistic)
-    #    - evita problema de matriz esparsa no permutation_importance
     # =========================================================
-    # nomes das features após one-hot
     ohe = pipe.named_steps["pre"].named_transformers_["cat"].named_steps["onehot"]
     cat_feature_names = list(ohe.get_feature_names_out(cat_cols))
     feature_names = num_cols + cat_feature_names
@@ -199,13 +218,14 @@ def main() -> None:
 
     metadata = {
         "target": "risco_defasagem",
-        "target_definition": "1 se Defas >= P75 (threshold calculado no dataset)",
-        "defas_threshold_p75": thr,
+        "target_definition": target_definition,
+        "threshold_reference": thr,
         "n_rows_total": int(len(df)),
         "n_rows_model": int(len(df_model)),
         "positive_rate_model": float(y.mean()),
         "features_numeric": num_cols,
         "features_categorical": cat_cols,
+        "removed_leakage_cols": leak_cols,
         "roc_auc": float(roc),
         "pr_auc": float(pr_auc),
     }
@@ -217,8 +237,8 @@ def main() -> None:
     md = f"""# Pergunta 9 — ML: Previsão de risco de defasagem
 
 ## Definição do alvo (risco)
-- Risco = **Defas >= P75**
-- Threshold (P75) = **{thr:.4f}**
+- {target_definition}
+- Referência/threshold usado = **{thr:.4f}**
 - Taxa de risco no dataset (model) = **{y.mean():.3f}**
 
 ## Features usadas (sem vazamento)
@@ -246,7 +266,7 @@ Arquivos gerados:
 
     print("✅ Q9 concluída! Outputs em:", OUT_DIR)
     print("   - Modelo salvo em: models/q9_model.pkl")
-    print("   - Importância (coeficientes) em: reports/q9/feature_importance_top30.csv")
+    print("   - Metadata em: models/q9_metadata.json")
 
 
 if __name__ == "__main__":

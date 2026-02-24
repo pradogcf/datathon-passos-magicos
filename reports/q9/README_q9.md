@@ -1,9 +1,9 @@
 # Pergunta 9 — ML: Previsão de risco de defasagem
 
 ## Definição do alvo (risco)
-- Risco = **Defas >= P75**
-- Threshold (P75) = **0.0000**
-- Taxa de risco no dataset (model) = **0.301**
+- 1 se Defas > 0 (qualquer defasagem)
+- Referência/threshold usado = **0.0000**
+- Taxa de risco no dataset (model) = **0.014**
 
 ## Features usadas (sem vazamento)
 Numéricas: IDA, IEG, IAA, IPS, Ano ingresso, Idade 22
@@ -14,8 +14,8 @@ Removidas por vazamento: Defas, IAN
 - Logistic Regression (class_weight=balanced) com pipeline de preprocessamento
 
 ## Métricas (teste)
-- ROC AUC = **0.9827**
-- PR AUC = **0.9631**
+- ROC AUC = **0.8962**
+- PR AUC = **0.1339**
 
 Arquivos gerados:
 - `classification_report.txt`
