@@ -1,0 +1,24 @@
+{
+  "target": "risco_defasagem",
+  "target_definition": "1 se Defas >= P75 (threshold calculado no dataset)",
+  "defas_threshold_p75": 0.0,
+  "n_rows_total": 860,
+  "n_rows_model": 860,
+  "positive_rate_model": 0.30116279069767443,
+  "features_numeric": [
+    "IDA",
+    "IEG",
+    "IAA",
+    "IPS",
+    "Ano ingresso",
+    "Idade 22"
+  ],
+  "features_categorical": [
+    "Fase",
+    "Pedra 22",
+    "G\u00eanero",
+    "Turma"
+  ],
+  "roc_auc": 0.9826666666666666,
+  "pr_auc": 0.9631386645616269
+}
